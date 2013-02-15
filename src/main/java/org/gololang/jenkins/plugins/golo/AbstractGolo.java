@@ -26,9 +26,11 @@ package org.gololang.jenkins.plugins.golo;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
+import hudson.util.DescriptorList;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 /**
@@ -44,7 +46,12 @@ public abstract class AbstractGolo extends Builder {
       this.scriptSource = scriptSource;
    }
 
-   protected static abstract class AbstractGoloBuilderDescriptor extends BuildStepDescriptor<Builder>{
+   public GoloSource getScriptSource() {
+      return scriptSource;
+   }
+
+
+   protected static abstract class AbstractGoloBuilderDescriptor extends BuildStepDescriptor<Builder> {
 
       public AbstractGoloBuilderDescriptor(Class<? extends Builder> clazz) {
          super(clazz);
@@ -55,6 +62,19 @@ public abstract class AbstractGolo extends Builder {
 
       @Override
       public abstract String getDisplayName();
+
+      // Used for grouping radio buttons together
+      private AtomicInteger instanceCounter = new AtomicInteger(0);
+
+      public int nextInstanceID() {
+         return instanceCounter.incrementAndGet();
+      }
+
+      // shortcut
+      public static DescriptorList<GoloSource> getScriptSources() {
+         return GoloSource.SOURCES;
+      }
+
 
       @Override
       public boolean configure(StaplerRequest req, JSONObject json) throws FormException {

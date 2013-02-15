@@ -25,7 +25,6 @@ package org.gololang.jenkins.plugins.golo;
 
 import hudson.*;
 import hudson.model.EnvironmentSpecific;
-import hudson.model.Hudson;
 import hudson.model.Node;
 import hudson.model.TaskListener;
 import hudson.remoting.Callable;
@@ -33,10 +32,8 @@ import hudson.slaves.NodeSpecific;
 import hudson.tools.ToolDescriptor;
 import hudson.tools.ToolInstallation;
 import hudson.tools.ToolProperty;
-import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,12 +108,12 @@ public final class GoloInstallation extends ToolInstallation implements Environm
       }
       @Override
       public GoloInstallation[] getInstallations() {
-         return Jenkins.getInstance().getDescriptorByType(Golo.GoloDescriptor.class).getInstallations();
+         return Jenkins.getInstance().getDescriptorByType(GoloBuilder.GoloBuilderDescriptor.class).getInstallations();
       }
 
       @Override
       public void setInstallations(GoloInstallation... installations) {
-         Jenkins.getInstance().getDescriptorByType(Golo.GoloDescriptor.class).setInstallations(installations);
+         Jenkins.getInstance().getDescriptorByType(GoloBuilder.GoloBuilderDescriptor.class).setInstallations(installations);
       }
 
    }

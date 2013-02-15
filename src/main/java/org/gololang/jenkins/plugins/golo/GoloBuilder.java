@@ -27,9 +27,9 @@ import hudson.CopyOnWrite;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
-import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import net.sf.json.JSONObject;
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.util.logging.Logger;
@@ -37,15 +37,17 @@ import java.util.logging.Logger;
 /**
  * @author Daniel Petisme <daniel.petisme@gmail.com>
  */
-public class Golo extends AbstractGolo {
+public class GoloBuilder extends AbstractGolo {
 
-   private static Logger LOGGER = Logger.getLogger(Golo.class.getName());
+   private static Logger LOGGER = Logger.getLogger(GoloBuilder.class.getName());
 
    @Extension
-   public static final GoloDescriptor DESCRIPTOR = new GoloDescriptor();
+   public static final GoloBuilderDescriptor DESCRIPTOR = new GoloBuilderDescriptor();
 
+   private GoloInstallation installation;
 
-   public Golo(GoloSource scriptSource) {
+   @DataBoundConstructor
+   public GoloBuilder(GoloSource scriptSource) {
       super(scriptSource);
    }
 
@@ -54,13 +56,13 @@ public class Golo extends AbstractGolo {
       return DESCRIPTOR;
    }
 
-   public static final class GoloDescriptor extends AbstractGoloBuilderDescriptor {
+   public static final class GoloBuilderDescriptor extends AbstractGoloBuilderDescriptor {
 
       @CopyOnWrite
       private volatile GoloInstallation[] installations = new GoloInstallation[0];
 
-      public GoloDescriptor() {
-         super(Golo.class);
+      public GoloBuilderDescriptor() {
+         super(GoloBuilder.class);
          load();
       }
 
@@ -77,7 +79,7 @@ public class Golo extends AbstractGolo {
 
       @Override
       public Builder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-         return req.bindJSON(Golo.class, formData);
+         return req.bindJSON(GoloBuilder.class, formData);
       }
 
       public GoloInstallation[] getInstallations() {
