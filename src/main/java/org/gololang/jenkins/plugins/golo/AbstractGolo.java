@@ -23,13 +23,17 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
+import hudson.CopyOnWrite;
+import hudson.DescriptorExtensionList;
 import hudson.model.AbstractProject;
+import hudson.model.Descriptor;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.DescriptorList;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -40,28 +44,35 @@ public abstract class AbstractGolo extends Builder {
 
    private static Logger LOGGER = Logger.getLogger(AbstractGolo.class.getName());
 
-   protected GoloSource scriptSource;
+   public final AbstractGoloSourceHandler sourceHandler;
 
-   public AbstractGolo(GoloSource scriptSource) {
-      this.scriptSource = scriptSource;
-   }
-
-   public GoloSource getScriptSource() {
-      return scriptSource;
+   public AbstractGolo(AbstractGoloSourceHandler sourceHandler) {
+      this.sourceHandler = sourceHandler;
    }
 
 
    protected static abstract class AbstractGoloBuilderDescriptor extends BuildStepDescriptor<Builder> {
 
+      @CopyOnWrite
+      private volatile GoloInstallation[] installations = new GoloInstallation[0];
+
+
       public AbstractGoloBuilderDescriptor(Class<? extends Builder> clazz) {
          super(clazz);
       }
 
-      @Override
-      public abstract boolean isApplicable(Class<? extends AbstractProject> aClass);
+      public boolean isApplicable(Class<? extends AbstractProject> clazz) {
+         return (getInstallations() != null && getInstallations().length > 0);
+      }
 
-      @Override
-      public abstract String getDisplayName();
+      public GoloInstallation[] getInstallations() {
+         return installations;
+      }
+
+      public void setInstallations(GoloInstallation[] installations) {
+         this.installations = installations;
+         save();
+      }
 
       // Used for grouping radio buttons together
       private AtomicInteger instanceCounter = new AtomicInteger(0);
@@ -71,8 +82,8 @@ public abstract class AbstractGolo extends Builder {
       }
 
       // shortcut
-      public static DescriptorList<GoloSource> getScriptSources() {
-         return GoloSource.SOURCES;
+      public static List<Descriptor<AbstractGoloSourceHandler>> getDeclaredGoloSourceHandlers() {
+         return AbstractGoloSourceHandler.all();
       }
 
 

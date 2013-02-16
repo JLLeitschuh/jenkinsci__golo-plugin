@@ -23,61 +23,43 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
-import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
 import hudson.model.Descriptor;
-import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.StaplerRequest;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
  * @author Daniel Petisme <daniel.petisme@gmail.com>
  */
-public class FileGoloSource implements GoloSource {
+public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
 
-   private static Logger LOGGER = Logger.getLogger(FileGoloSource.class.getName());
+   private static Logger LOGGER = Logger.getLogger(FileGoloSourceHandler.class.getName());
 
-   @Extension
-   public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
+   private final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
-   private String scriptFile;
+   public final String filename;
 
    @DataBoundConstructor
-   public FileGoloSource(String scriptFile) {
-      this.scriptFile = scriptFile;
+   public FileGoloSourceHandler(String filename) {
+      this.filename = filename;
    }
 
    @Override
    public FilePath getScriptFile(FilePath projectWorkspace) {
-      return new FilePath(projectWorkspace, scriptFile);
-   }
-
-   @Override
-   public FilePath getScriptFile(FilePath projectWorkspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException {
-      EnvVars env = build.getEnvironment(listener);
-      String expandedScriptdFile = env.expand(this.scriptFile);
-      return new FilePath(projectWorkspace, expandedScriptdFile);
-   }
-
-   public String getScriptFile() {
-      return scriptFile;
+      return new FilePath(projectWorkspace, filename);
    }
 
 
-   public Descriptor<GoloSource> getDescriptor() {
+   public Descriptor<AbstractGoloSourceHandler> getDescriptor() {
       return DESCRIPTOR;
    }
 
-   public static class DescriptorImpl extends Descriptor<GoloSource> {
+   public static class DescriptorImpl extends Descriptor<AbstractGoloSourceHandler> {
 
       public DescriptorImpl() {
-         super(FileGoloSource.class);
+         super(FileGoloSourceHandler.class);
       }
 
       @Override
@@ -85,9 +67,5 @@ public class FileGoloSource implements GoloSource {
          return Messages.FileGoloSource_DisplayName();
       }
 
-      @Override
-      public FileGoloSource newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-         return req.bindJSON(FileGoloSource.class, formData);
-      }
    }
 }

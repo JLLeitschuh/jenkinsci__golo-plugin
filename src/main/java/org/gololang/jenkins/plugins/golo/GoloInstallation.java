@@ -38,6 +38,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -51,10 +52,13 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    private static final String GOLO_WIN_CMD = "golo.bat";
    private static final String GOLO_UNIX_CMD = "golo";
 
+   public final String id = UUID.randomUUID().toString();
+
    @DataBoundConstructor
    public GoloInstallation(String name, String home, List<? extends ToolProperty<?>> properties) {
       super(name, home, properties);
    }
+
 
    public GoloInstallation forEnvironment(EnvVars envVars) {
       return new GoloInstallation(getName(), envVars.expand(getHome()), getProperties().toList());
@@ -72,9 +76,9 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    /**
     * Gets the executable path of this Golo installation on the given target system.
     */
-   public String getExecutable(Launcher launcher) throws IOException, InterruptedException {
-      return launcher.getChannel().call(new Callable<String, IOException>() {
-         public String call() throws IOException {
+   public java.lang.String getExecutable(Launcher launcher) throws IOException, InterruptedException {
+      return launcher.getChannel().call(new Callable<java.lang.String, IOException>() {
+         public java.lang.String call() throws IOException {
             File exe = getExeFile();
             if (exe.exists())
                return exe.getPath();
@@ -84,8 +88,8 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    }
 
    private File getExeFile() {
-      String execName = Functions.isWindows() ? GOLO_WIN_CMD : GOLO_UNIX_CMD;
-      String home = Util.replaceMacro(getHome(), EnvVars.masterEnvVars);
+      java.lang.String execName = Functions.isWindows() ? GOLO_WIN_CMD : GOLO_UNIX_CMD;
+      java.lang.String home = Util.replaceMacro(getHome(), EnvVars.masterEnvVars);
 
       return new File(home, "bin/" + execName);
    }
@@ -106,6 +110,7 @@ public final class GoloInstallation extends ToolInstallation implements Environm
       public String getDisplayName() {
          return Messages.GoloInstallation_DisplayName();
       }
+
       @Override
       public GoloInstallation[] getInstallations() {
          return Jenkins.getInstance().getDescriptorByType(GoloBuilder.GoloBuilderDescriptor.class).getInstallations();

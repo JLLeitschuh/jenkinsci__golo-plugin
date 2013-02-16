@@ -44,11 +44,12 @@ public class GoloBuilder extends AbstractGolo {
    @Extension
    public static final GoloBuilderDescriptor DESCRIPTOR = new GoloBuilderDescriptor();
 
-   private GoloInstallation installation;
+   public final String installationId;
 
    @DataBoundConstructor
-   public GoloBuilder(GoloSource scriptSource) {
-      super(scriptSource);
+   public GoloBuilder(String installationId, AbstractGoloSourceHandler sourceHandler) {
+      super(sourceHandler);
+      this.installationId = installationId;
    }
 
    @Override
@@ -72,7 +73,7 @@ public class GoloBuilder extends AbstractGolo {
       }
 
       @Override
-      public String getDisplayName() {
+      public java.lang.String getDisplayName() {
          return Messages.Golo_DisplayName();
       }
 

@@ -28,25 +28,23 @@ st = namespace("jelly:stapler")
 j = namespace("jelly:core")
 l = namespace(lib.LayoutTagLib)
 f = namespace(lib.FormTagLib)
-def descriptor = org.gololang.jenkins.plugins.golo.GoloBuilder.DESCRIPTOR
 
-f.entry() {
-   if (descriptor.installations.length != 0) {
-      f.entry(title: _("Golo_Version")) {
-         select(class: "setting-input", name: "golo.installation") {
-            option(value: "(Default)", _("Golo_Default_Version"))
-            descriptor.installations.each { installation ->
-               f.option(selected: installation.name == instance?.installation?.name, value: installation.name, installation.name)
-            }
+
+if (descriptor.installations.length != 0) {
+   f.entry(title: _("Golo_Version"), field: "installationId") {
+
+      select(class: "setting-input", name: "installationId") {
+         f.option(value: "Default", _("Golo_Default_Version"))
+         descriptor.installations.each() { installation ->
+            f.option(selected: installation.id == instance?.installationId, value: installation.id, installation.name)
          }
       }
-
-      def instanceID = descriptor.nextInstanceID()
-      descriptor.scriptSources.inject(0) { loop, source ->
-         f.radioBlock(help: source.helpFile, title: source.displayName, name: "${instanceID}.scriptSource", value: loop, checked: instance?.scriptSource?.descriptor == source) {
-            st.include(page: source.configPage, from: source)
-            loop++
-         }
+   }
+   def instanceID = descriptor.nextInstanceID()
+   descriptor.declaredGoloSourceHandlers.inject(0) { loop, sourceHandler ->
+      f.radioBlock(help: sourceHandler.helpFile, title: sourceHandler.displayName, name: "${instanceID}.sourceHandler", value: loop, checked: instance?.sourceHandler?.descriptor == sourceHandler) {
+         st.include(page: sourceHandler.configPage, from: sourceHandler)
+         loop++
       }
    }
 }

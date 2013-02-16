@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.gololang.jenkins.plugins.golo.FileGoloSource
+package org.gololang.jenkins.plugins.golo.FileGoloSourceHandler
 
 f = namespace(lib.FormTagLib)
-f.entry() {
-   f.textbox(name: "command", value: instance?.scriptSource?.scriptFile, class: "fixed-width")
+f.entry(field: "filename") {
+   f.textbox(class: "fixed-width")
 }
