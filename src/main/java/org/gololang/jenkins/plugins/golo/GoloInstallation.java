@@ -88,8 +88,8 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    }
 
    private File getExeFile() {
-      java.lang.String execName = Functions.isWindows() ? GOLO_WIN_CMD : GOLO_UNIX_CMD;
-      java.lang.String home = Util.replaceMacro(getHome(), EnvVars.masterEnvVars);
+      String execName = Functions.isWindows() ? GOLO_WIN_CMD : GOLO_UNIX_CMD;
+      String home = Util.replaceMacro(getHome(), EnvVars.masterEnvVars);
 
       return new File(home, "bin/" + execName);
    }

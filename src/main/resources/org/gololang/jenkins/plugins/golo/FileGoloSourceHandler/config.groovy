@@ -25,5 +25,5 @@ package org.gololang.jenkins.plugins.golo.FileGoloSourceHandler
 
 f = namespace(lib.FormTagLib)
 f.entry(field: "filename") {
-   f.textbox(class: "fixed-width")
+   f.textbox(class: "fixed-width", name: "filename", value: instance?.sourceHandler?.filename)
 }

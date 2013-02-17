@@ -40,11 +40,14 @@ if (descriptor.installations.length != 0) {
          }
       }
    }
-   def instanceID = descriptor.nextInstanceID()
-   descriptor.declaredGoloSourceHandlers.inject(0) { loop, sourceHandler ->
-      f.radioBlock(help: sourceHandler.helpFile, title: sourceHandler.displayName, name: "${instanceID}.sourceHandler", value: loop, checked: instance?.sourceHandler?.descriptor == sourceHandler) {
-         st.include(page: sourceHandler.configPage, from: sourceHandler)
-         loop++
+   f.entry(field: "sourceHandler") {
+      descriptor.GOLO_SOURCE_HANDLERS.each { sourceHandler ->
+         f.radioBlock(title: sourceHandler.displayName, name: "sourceHandler", value: sourceHandler, checked: sourceHandler == instance?.sourceHandler?.descriptor) {
+            f.invisibleEntry {
+               input(type: "hidden", name: "stapler-class", value: sourceHandler.clazz.name)
+            }
+            st.include(from: sourceHandler, page: sourceHandler.configPage)
+         }
       }
    }
 }

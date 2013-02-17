@@ -24,13 +24,12 @@
 package org.gololang.jenkins.plugins.golo;
 
 import hudson.CopyOnWrite;
-import hudson.DescriptorExtensionList;
 import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
-import hudson.util.DescriptorList;
 import net.sf.json.JSONObject;
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.util.List;
@@ -43,22 +42,24 @@ import java.util.logging.Logger;
 public abstract class AbstractGolo extends Builder {
 
    private static Logger LOGGER = Logger.getLogger(AbstractGolo.class.getName());
-
    public final AbstractGoloSourceHandler sourceHandler;
 
+   @DataBoundConstructor
    public AbstractGolo(AbstractGoloSourceHandler sourceHandler) {
       this.sourceHandler = sourceHandler;
    }
 
-
    protected static abstract class AbstractGoloBuilderDescriptor extends BuildStepDescriptor<Builder> {
 
+      public static List<Descriptor<AbstractGoloSourceHandler>> GOLO_SOURCE_HANDLERS = AbstractGoloSourceHandler.LIST;
       @CopyOnWrite
       private volatile GoloInstallation[] installations = new GoloInstallation[0];
-
+      // Used for grouping radio buttons together
+      private AtomicInteger instanceCounter = new AtomicInteger(0);
 
       public AbstractGoloBuilderDescriptor(Class<? extends Builder> clazz) {
          super(clazz);
+         load();
       }
 
       public boolean isApplicable(Class<? extends AbstractProject> clazz) {
@@ -74,18 +75,9 @@ public abstract class AbstractGolo extends Builder {
          save();
       }
 
-      // Used for grouping radio buttons together
-      private AtomicInteger instanceCounter = new AtomicInteger(0);
-
       public int nextInstanceID() {
          return instanceCounter.incrementAndGet();
       }
-
-      // shortcut
-      public static List<Descriptor<AbstractGoloSourceHandler>> getDeclaredGoloSourceHandlers() {
-         return AbstractGoloSourceHandler.all();
-      }
-
 
       @Override
       public boolean configure(StaplerRequest req, JSONObject json) throws FormException {

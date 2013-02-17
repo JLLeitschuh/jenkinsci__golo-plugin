@@ -23,14 +23,7 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
-import hudson.CopyOnWrite;
-import hudson.Extension;
-import hudson.model.AbstractProject;
-import hudson.model.Descriptor;
-import hudson.tasks.Builder;
-import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.StaplerRequest;
 
 import java.util.logging.Logger;
 
@@ -40,10 +33,6 @@ import java.util.logging.Logger;
 public class GoloBuilder extends AbstractGolo {
 
    private static Logger LOGGER = Logger.getLogger(GoloBuilder.class.getName());
-
-   @Extension
-   public static final GoloBuilderDescriptor DESCRIPTOR = new GoloBuilderDescriptor();
-
    public final String installationId;
 
    @DataBoundConstructor
@@ -52,44 +41,15 @@ public class GoloBuilder extends AbstractGolo {
       this.installationId = installationId;
    }
 
-   @Override
-   public Descriptor<Builder> getDescriptor() {
-      return DESCRIPTOR;
-   }
-
    public static final class GoloBuilderDescriptor extends AbstractGoloBuilderDescriptor {
-
-      @CopyOnWrite
-      private volatile GoloInstallation[] installations = new GoloInstallation[0];
 
       public GoloBuilderDescriptor() {
          super(GoloBuilder.class);
-         load();
       }
 
       @Override
-      public boolean isApplicable(Class<? extends AbstractProject> aClass) {
-         return (getInstallations() != null && getInstallations().length > 0);
-      }
-
-      @Override
-      public java.lang.String getDisplayName() {
+      public String getDisplayName() {
          return Messages.Golo_DisplayName();
-      }
-
-
-      @Override
-      public Builder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-         return req.bindJSON(GoloBuilder.class, formData);
-      }
-
-      public GoloInstallation[] getInstallations() {
-         return installations;
-      }
-
-      public void setInstallations(GoloInstallation[] installations) {
-         this.installations = installations;
-         save();
       }
    }
 }

@@ -23,7 +23,6 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
-import hudson.Extension;
 import hudson.FilePath;
 import hudson.model.Descriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -36,8 +35,7 @@ import java.util.logging.Logger;
 public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
 
    private static Logger LOGGER = Logger.getLogger(FileGoloSourceHandler.class.getName());
-
-   private final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
+   public static final DescriptorImpl descriptor = new DescriptorImpl();
 
    public final String filename;
 
@@ -51,17 +49,7 @@ public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
       return new FilePath(projectWorkspace, filename);
    }
 
-
-   public Descriptor<AbstractGoloSourceHandler> getDescriptor() {
-      return DESCRIPTOR;
-   }
-
    public static class DescriptorImpl extends Descriptor<AbstractGoloSourceHandler> {
-
-      public DescriptorImpl() {
-         super(FileGoloSourceHandler.class);
-      }
-
       @Override
       public String getDisplayName() {
          return Messages.FileGoloSource_DisplayName();

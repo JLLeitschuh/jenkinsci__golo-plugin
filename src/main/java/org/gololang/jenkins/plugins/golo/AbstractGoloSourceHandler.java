@@ -23,13 +23,8 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
-import hudson.DescriptorExtensionList;
-import hudson.ExtensionPoint;
 import hudson.FilePath;
 import hudson.model.AbstractDescribableImpl;
-import hudson.model.Describable;
-import hudson.model.Descriptor;
-import hudson.model.Hudson;
 import hudson.util.DescriptorList;
 
 import java.io.IOException;
@@ -37,13 +32,10 @@ import java.io.IOException;
 /**
  * @author Daniel Petisme <daniel.petisme@gmail.com>
  */
-public abstract class AbstractGoloSourceHandler extends AbstractDescribableImpl<AbstractGoloSourceHandler> implements ExtensionPoint {
+public abstract class AbstractGoloSourceHandler extends AbstractDescribableImpl<AbstractGoloSourceHandler> {
 
    public abstract FilePath getScriptFile(FilePath projectWorkspace) throws IOException, InterruptedException;
 
-   public static DescriptorExtensionList<AbstractGoloSourceHandler, Descriptor<AbstractGoloSourceHandler>> all() {
-      return Hudson.getInstance().<AbstractGoloSourceHandler, Descriptor<AbstractGoloSourceHandler>>getDescriptorList(AbstractGoloSourceHandler.class);
-   }
-
+   public static final DescriptorList<AbstractGoloSourceHandler> LIST = new DescriptorList<AbstractGoloSourceHandler>((Class) AbstractGoloSourceHandler.class);
 
 }
