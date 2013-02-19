@@ -23,10 +23,14 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
+import hudson.EnvVars;
 import hudson.FilePath;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
 import hudson.model.Descriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -34,9 +38,8 @@ import java.util.logging.Logger;
  */
 public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
 
-   private static Logger LOGGER = Logger.getLogger(FileGoloSourceHandler.class.getName());
    public static final DescriptorImpl descriptor = new DescriptorImpl();
-
+   private static Logger LOGGER = Logger.getLogger(FileGoloSourceHandler.class.getName());
    public final String filename;
 
    @DataBoundConstructor
@@ -45,9 +48,12 @@ public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
    }
 
    @Override
-   public FilePath getScriptFile(FilePath projectWorkspace) {
-      return new FilePath(projectWorkspace, filename);
+   public FilePath getScriptFile(FilePath workspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException {
+      EnvVars env = build.getEnvironment(listener);
+      String expandedFilename = env.expand(filename);
+      return new FilePath(workspace, expandedFilename);
    }
+
 
    public static class DescriptorImpl extends Descriptor<AbstractGoloSourceHandler> {
       @Override

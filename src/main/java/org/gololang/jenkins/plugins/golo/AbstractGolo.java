@@ -29,9 +29,13 @@ import hudson.model.Descriptor;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -75,8 +79,18 @@ public abstract class AbstractGolo extends Builder {
          save();
       }
 
-      public int nextInstanceID() {
-         return instanceCounter.incrementAndGet();
+      public GoloInstallation getGoloInstallationById(final String goloInstallationId) {
+         GoloInstallation installation = null;
+         if (StringUtils.isNotBlank(goloInstallationId)) {
+            installation = (GoloInstallation) CollectionUtils.find(Arrays.asList(installations), new Predicate() {
+               public boolean evaluate(Object current) {
+                  //A little bit of functionnal
+                  return ((GoloInstallation) current).id.equals(goloInstallationId);
+               }
+            });
+         }
+
+         return installation;
       }
 
       @Override

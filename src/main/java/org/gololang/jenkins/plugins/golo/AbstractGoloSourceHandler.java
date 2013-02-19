@@ -24,7 +24,9 @@
 package org.gololang.jenkins.plugins.golo;
 
 import hudson.FilePath;
+import hudson.model.AbstractBuild;
 import hudson.model.AbstractDescribableImpl;
+import hudson.model.BuildListener;
 import hudson.util.DescriptorList;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ import java.io.IOException;
  */
 public abstract class AbstractGoloSourceHandler extends AbstractDescribableImpl<AbstractGoloSourceHandler> {
 
-   public abstract FilePath getScriptFile(FilePath projectWorkspace) throws IOException, InterruptedException;
+   public abstract FilePath getScriptFile(FilePath workspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException;
 
    public static final DescriptorList<AbstractGoloSourceHandler> LIST = new DescriptorList<AbstractGoloSourceHandler>((Class) AbstractGoloSourceHandler.class);
 

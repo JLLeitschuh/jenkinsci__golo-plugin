@@ -23,8 +23,16 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
+import hudson.EnvVars;
+import hudson.FilePath;
+import hudson.Launcher;
+import hudson.Util;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
+import hudson.model.Computer;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -41,6 +49,44 @@ public class GoloBuilder extends AbstractGolo {
       this.installationId = installationId;
    }
 
+   @Override
+   public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
+      boolean isSuccess = false;
+      if (sourceHandler != null) {
+         FilePath goloScript = null;
+         try {
+            goloScript = sourceHandler.getScriptFile(build.getWorkspace(), build, listener);
+         } catch (IOException e) {
+            Util.displayIOException(e, listener);
+            e.printStackTrace(listener.fatalError(Messages.GoloBuilder_UnableToProduceScriptFile()));
+            throw e;
+         }
+
+         GoloInstallation installation = ((AbstractGoloBuilderDescriptor) getDescriptor()).getGoloInstallationById(this.installationId);
+
+         if (installation != null) {
+            EnvVars env = build.getEnvironment(listener);
+            installation = installation.forNode(Computer.currentComputer().getNode(), listener);
+            installation = installation.forEnvironment(env);
+            String exe = installation.getExecutable(launcher);
+            try {
+               isSuccess = launcher.launch().cmds(exe, goloScript.getRemote()).envs(env).stdout(listener).pwd(build.getWorkspace()).join() == 0;
+            } catch (IOException e) {
+               Util.displayIOException(e, listener);
+               e.printStackTrace(listener.fatalError(Messages.GoloBuilder_ExecutionFailed()));
+               throw e;
+            }
+         } else {
+            listener.fatalError(Messages.GoloBuilder_NoInstallationDefined());
+         }
+
+
+      } else {
+         listener.fatalError(Messages.GoloBuilder_NoScriptDefined());
+      }
+      return isSuccess;
+   }
+
    public static final class GoloBuilderDescriptor extends AbstractGoloBuilderDescriptor {
 
       public GoloBuilderDescriptor() {
@@ -49,7 +95,7 @@ public class GoloBuilder extends AbstractGolo {
 
       @Override
       public String getDisplayName() {
-         return Messages.Golo_DisplayName();
+         return Messages.GoloBuilder_DisplayName();
       }
    }
 }

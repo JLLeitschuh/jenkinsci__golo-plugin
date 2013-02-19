@@ -49,8 +49,8 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    private static Logger LOGGER = Logger.getLogger(GoloInstallation.class.getName());
 
    private static final String GOLO_HOME_ENV_VAR_NAME = "GOLO_HOME";
-   private static final String GOLO_WIN_CMD = "golo.bat";
-   private static final String GOLO_UNIX_CMD = "golo";
+   private static final String GOLOGOLO_WIN_CMD = "gologolo.bat";
+   private static final String GOLOGOLO_UNIX_CMD = "gologolo";
 
    public final String id = UUID.randomUUID().toString();
 
@@ -76,7 +76,7 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    /**
     * Gets the executable path of this Golo installation on the given target system.
     */
-   public java.lang.String getExecutable(Launcher launcher) throws IOException, InterruptedException {
+   public String getExecutable(Launcher launcher) throws IOException, InterruptedException {
       return launcher.getChannel().call(new Callable<java.lang.String, IOException>() {
          public java.lang.String call() throws IOException {
             File exe = getExeFile();
@@ -88,7 +88,7 @@ public final class GoloInstallation extends ToolInstallation implements Environm
    }
 
    private File getExeFile() {
-      String execName = Functions.isWindows() ? GOLO_WIN_CMD : GOLO_UNIX_CMD;
+      String execName = Functions.isWindows() ? GOLOGOLO_WIN_CMD : GOLOGOLO_UNIX_CMD;
       String home = Util.replaceMacro(getHome(), EnvVars.masterEnvVars);
 
       return new File(home, "bin/" + execName);
