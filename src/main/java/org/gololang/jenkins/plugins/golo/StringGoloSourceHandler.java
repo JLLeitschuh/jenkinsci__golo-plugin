@@ -23,9 +23,9 @@
  */
 package org.gololang.jenkins.plugins.golo;
 
-import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
+import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
@@ -37,37 +37,47 @@ import java.util.logging.Logger;
 /**
  * @author Daniel Petisme <daniel.petisme@gmail.com>
  */
-public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
+public class StringGoloSourceHandler extends AbstractGoloSourceHandler {
 
    public static final DescriptorImpl descriptor = new DescriptorImpl();
-   private static Logger LOGGER = Logger.getLogger(FileGoloSourceHandler.class.getName());
-   public final String filename;
+   private static Logger LOGGER = Logger.getLogger(StringGoloSourceHandler.class.getName());
+   public final String command;
 
    @DataBoundConstructor
-   public FileGoloSourceHandler(String filename) {
-      this.filename = filename;
+   public StringGoloSourceHandler(String command) {
+      this.command = command;
    }
-
 
    @Override
    public FilePath getScriptFile(FilePath workspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException {
-      EnvVars env = build.getEnvironment(listener);
-      String expandedFilename = env.expand(filename);
-      return new FilePath(workspace, expandedFilename);
+      return workspace.createTextTempFile("jenkins-", GOLO_SUFFIX, command, true);
    }
 
    @Override
    public boolean cleanScriptFile(FilePath script, BuildListener listener) throws IOException, InterruptedException {
-      return true; //Nothing to clean
-   }
+      boolean isSuccess = false;
+      try {
+         if (script != null)
+            isSuccess = script.delete();
+      } catch (IOException e) {
+         Util.displayIOException(e, listener);
+         e.printStackTrace(listener.fatalError(Messages.StringGoloSourceHandler_UnableToDelete(script)));
+         throw e;
+      } catch (InterruptedException e) {
+         e.printStackTrace(listener.fatalError(Messages.StringGoloSourceHandler_UnableToDelete(script)));
+         throw e;
+      }
 
+      return isSuccess;
+   }
 
    @Extension
    public static class DescriptorImpl extends Descriptor<AbstractGoloSourceHandler> {
       @Override
       public String getDisplayName() {
-         return Messages.FileGoloSource_DisplayName();
+         return Messages.StringGoloSource_DisplayName();
       }
 
    }
 }
+

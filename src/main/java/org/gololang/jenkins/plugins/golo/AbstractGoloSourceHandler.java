@@ -36,8 +36,10 @@ import java.io.IOException;
  */
 public abstract class AbstractGoloSourceHandler extends AbstractDescribableImpl<AbstractGoloSourceHandler> {
 
-   public abstract FilePath getScriptFile(FilePath workspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException;
-
+   public static final String GOLO_SUFFIX = ".golo";
    public static final DescriptorList<AbstractGoloSourceHandler> LIST = new DescriptorList<AbstractGoloSourceHandler>((Class) AbstractGoloSourceHandler.class);
+
+   public abstract boolean cleanScriptFile(FilePath script, BuildListener listener) throws IOException, InterruptedException;
+   public abstract FilePath getScriptFile(FilePath workspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException;
 
 }

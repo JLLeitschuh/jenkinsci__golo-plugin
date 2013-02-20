@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.gololang.jenkins.plugins.golo.FileGoloSourceHandler
+package org.gololang.jenkins.plugins.golo.StringGoloSourceHandler
 
 f = namespace(lib.FormTagLib)
+st = namespace("jelly:stapler")
 
 f.entry() {
-   f.textbox(class: "fixed-width", name: "filename", value: instance?.sourceHandler?.filename)
+   f.textarea(name: "command", value: instance?.sourceHandler?.command, class: "fixed-width")
 }

@@ -69,13 +69,17 @@ public class GoloBuilder extends AbstractGolo {
             installation = installation.forNode(Computer.currentComputer().getNode(), listener);
             installation = installation.forEnvironment(env);
             String exe = installation.getExecutable(launcher);
+
             try {
                isSuccess = launcher.launch().cmds(exe, goloScript.getRemote()).envs(env).stdout(listener).pwd(build.getWorkspace()).join() == 0;
             } catch (IOException e) {
                Util.displayIOException(e, listener);
                e.printStackTrace(listener.fatalError(Messages.GoloBuilder_ExecutionFailed()));
                throw e;
+            } finally {
+               sourceHandler.cleanScriptFile(goloScript, listener);
             }
+
          } else {
             listener.fatalError(Messages.GoloBuilder_NoInstallationDefined());
          }

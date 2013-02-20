@@ -41,6 +41,13 @@ if (descriptor.installations.length != 0) {
       }
    }
    f.entry(field: "sourceHandler") {
+      /*
+       * Prevent the MissingPropertyException. Indeed, each source handler config page will be loaded but 0 or 1 type is define,
+       * the one define in instance. So first instance you can't find a filename property in a FileGoloSourceHandler.
+       * With this workaround, a missing property will be replaced by an empty string.
+       */
+      instance.sourceHandler.metaClass.propertyMissing = { "" }
+
       descriptor.GOLO_SOURCE_HANDLERS.each { sourceHandler ->
          f.radioBlock(title: sourceHandler.displayName, name: "sourceHandler", value: sourceHandler, checked: sourceHandler == instance?.sourceHandler?.descriptor) {
             f.invisibleEntry {
