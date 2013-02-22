@@ -6,14 +6,14 @@ This plugin makes it possible to invoke [Golo](http://golo-lang.org/) build scri
 
 # Configuration #
 To configure available Golo installation on your system, go to Jenkins configuration page, find section 'Golo' and fill the form as shown bellow.
-![Golo_Configuration](./img/Golo_Configuration.png)
+![Golo_Configuration](https://bitbucket.org/danielpetisme/golo-plugin/raw/176438ba7ecf02d8063766689befcaccb6bd4933/img/Golo_Configuration.png)
 
 # Usage #
 
 You can use the plugin to invoke either a Golo script or a inline Golo command.
-![Golo_Script](./img/Golo_InvokeGoloScript.png)
-![Golo_Command](./img/Golo_InvokeGoloCommand.png)
-![Golo_Output](./img/Golo_Output.png)
+![Golo_Script](https://bitbucket.org/danielpetisme/golo-plugin/raw/176438ba7ecf02d8063766689befcaccb6bd4933/img/Golo_InvokeGoloScript.png)
+![Golo_Command](https://bitbucket.org/danielpetisme/golo-plugin/raw/176438ba7ecf02d8063766689befcaccb6bd4933/img/Golo_InvokeGoloCommand.png)
+![Golo_Output](https://bitbucket.org/danielpetisme/golo-plugin/raw/176438ba7ecf02d8063766689befcaccb6bd4933/img/Golo_Output.png)
 
 # Changelog #
 
