@@ -57,8 +57,6 @@ public class GoloBuilder extends AbstractGolo {
          try {
             goloScript = sourceHandler.getScriptFile(build.getWorkspace(), build, listener);
          } catch (IOException e) {
-            Util.displayIOException(e, listener);
-            e.printStackTrace(listener.fatalError(Messages.GoloBuilder_UnableToProduceScriptFile()));
             throw e;
          }
 

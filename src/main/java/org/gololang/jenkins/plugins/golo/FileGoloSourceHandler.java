@@ -29,6 +29,7 @@ import hudson.FilePath;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
@@ -48,19 +49,24 @@ public class FileGoloSourceHandler extends AbstractGoloSourceHandler {
       this.filename = filename;
    }
 
-
    @Override
    public FilePath getScriptFile(FilePath workspace, AbstractBuild<?, ?> build, BuildListener listener) throws IOException, InterruptedException {
+      FilePath script = null;
       EnvVars env = build.getEnvironment(listener);
-      String expandedFilename = env.expand(filename);
-      return new FilePath(workspace, expandedFilename);
+      if (StringUtils.isNotBlank(filename)) {
+         String expandedFilename = env.expand(filename);
+         script = new FilePath(workspace, expandedFilename);
+      } else {
+         throw new IOException(Messages.FileGoloSource_NoFilenameProvided());
+      }
+
+      return script;
    }
 
    @Override
    public boolean cleanScriptFile(FilePath script, BuildListener listener) throws IOException, InterruptedException {
       return true; //Nothing to clean
    }
-
 
    @Extension
    public static class DescriptorImpl extends Descriptor<AbstractGoloSourceHandler> {
