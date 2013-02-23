@@ -17,7 +17,7 @@ You can use the plugin to invoke either a Golo script or a inline Golo command.
 
 # Changelog #
 
-## Version 1.0.0 - (February 22, 2013) ##
+## Version 1.0.0 - (February 23, 2013) ##
 * Initial release
    * Define a Golo installation
    * Invoke a Golo script
