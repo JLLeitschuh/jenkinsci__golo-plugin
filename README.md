@@ -6,7 +6,7 @@ Golo-plugin
 # About #
 This plugin makes it possible to invoke [Golo](http://golo-lang.org/) code as a build step.
 
-Have a look at the official [Golo-Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Golo+Plugin) Wiki page
+Have a look at the official [Golo-Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Golo+Plugin) Wiki page.
 
 # Configuration #
 To configure available Golo installation on your system, go to Jenkins configuration page, find section 'Golo' and fill the form as shown bellow.
