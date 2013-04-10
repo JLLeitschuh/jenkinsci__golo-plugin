@@ -8,11 +8,28 @@
   </parent>
 
   <groupId>org.gololang.jenkins.plugins</groupId>
-  <artifactId>golo</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>golo-plugin</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
-
+  <scm>
+    <connection>scm:git:ssh://github.com/jenkinsci/golo-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jenkinsci/golo-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/golo-plugin</url>
+  </scm>  
+  <ciManagement>
+      <system>jenkins</system>
+      <url>https://buildhive.cloudbees.com/job/jenkinsci/golo-plugin</url>
+  </ciManagement>
+  
+  <developers>
+    <developer>
+      <id>danielpetisme</id>
+      <name>Daniel Petisme</name>
+      <email>daniel.petisme@gmail.com</email>
+    </developer>
+  </developers>
+  
   <!-- get every artifact through repo.jenkins-ci.org, which proxies all the artifacts that we need -->
   <repositories>
     <repository>

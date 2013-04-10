@@ -1,6 +1,8 @@
 Golo-plugin
 ===========
 
+[![Build Status](https://buildhive.cloudbees.com/job/jenkinsci/job/golo-plugin/badge/icon)](https://buildhive.cloudbees.com/job/jenkinsci/job/golo-plugin/)
+
 # About #
 This plugin makes it possible to invoke [Golo](http://golo-lang.org/) build script as the main build step.
 
@@ -17,7 +19,7 @@ You can use the plugin to invoke either a Golo script or a inline Golo command.
 
 # Changelog #
 
-## Version 1.0.0 - (February 23, 2013) ##
+## Version 1.0.0 - (April 1Oth, 2013) ##
 * Initial release
    * Define a Golo installation
    * Invoke a Golo script
