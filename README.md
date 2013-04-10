@@ -5,6 +5,7 @@ Golo-plugin
 
 # About #
 This plugin makes it possible to invoke [Golo](http://golo-lang.org/) code as a build step.
+
 Have a look at the official [Golo-Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Golo+Plugin) Wiki page
 
 # Configuration #
